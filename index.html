@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mic Channel Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.5; }
+    button { font-size: 16px; padding: 10px 14px; margin-bottom: 12px; }
+    pre { white-space: pre-wrap; word-break: break-word; background: #f4f4f4; padding: 12px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Mic Channel Test</h2>
+  <button id="startBtn">Start Mic Test</button>
+  <pre id="log">Ready.</pre>
+
+  <script>
+    function log(msg) {
+      document.getElementById("log").textContent += "\n" + msg;
+    }
+
+    document.getElementById("startBtn").onclick = async () => {
+      document.getElementById("log").textContent = "Starting...";
+      try {
+        const supported = navigator.mediaDevices.getSupportedConstraints();
+        log("\nSupported constraints:");
+        log(JSON.stringify(supported, null, 2));
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            channelCount: 2,
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false
+          },
+          video: false
+        });
+
+        const track = stream.getAudioTracks()[0];
+        log("\nTrack label:");
+        log(track.label || "(no label)");
+
+        log("\nTrack settings:");
+        log(JSON.stringify(track.getSettings(), null, 2));
+
+        if (track.getCapabilities) {
+          log("\nTrack capabilities:");
+          log(JSON.stringify(track.getCapabilities(), null, 2));
+        }
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(stream);
+
+        log("\nAudioContext sampleRate: " + audioContext.sampleRate);
+        log("Source channelCount: " + source.channelCount);
+        log("Source channelCountMode: " + source.channelCountMode);
+        log("Source channelInterpretation: " + source.channelInterpretation);
+
+      } catch (err) {
+        log("\nError:");
+        log(err.name + ": " + err.message);
+      }
+    };
+  </script>
+</body>
+</html>
