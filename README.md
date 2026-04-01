@@ -1,22 +1,25 @@
 # Web Mic Channel Test
 
-Simple web page for checking microphone channel count and audio input behavior.
+A minimal web-based tool for inspecting microphone input behavior and channel exposure across devices.
 
 ## Purpose
 
-- check whether a device exposes 1 or 2 input channels  
-- verify if channels are independent or processed  
-- document platform limitations  
+- verify microphone channel availability  
+- compare requested vs actual input settings  
+- observe platform-level audio limitations  
 
-## Usage
+## Live Test
 
-1. open the page  
-2. click Start Mic Test  
-3. allow microphone access  
-4. review channelCount and settings  
+https://muradtulunay.github.io/web-mic-channel-test/
 
-## Key Insight
+## Experimental Findings
 
-Multi-channel input does not guarantee independent directional data.
+See:
 
-This test helps reveal real-world limitations in microphone capture systems.
+docs/experimental-findings-and-platform-limitations.md
+
+## Scope
+
+This repository focuses only on low-level microphone input behavior.
+
+It does not implement or demonstrate higher-level voice isolation logic.
